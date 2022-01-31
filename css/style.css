@@ -27,6 +27,8 @@ ul {
 }
 
 .user-form {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -37,7 +39,13 @@ ul {
     box-shadow: -6px 5px 20px 5px rgba(0,0,0,0.35);
 }
 
+.user-form_active {
+    padding-bottom: 70px;
+}
+
 .user-form__input {
+    position: relative;
+    z-index: 999;
     width: 95%;
     padding: 15px 10px 15px 50px;
     border-radius: 10px;
@@ -50,6 +58,8 @@ ul {
 
 
 .user-form__clear {
+    position: absolute;
+    z-index: -1;
     margin-top: 20px;
     padding-left: 30px;
     border: 0;
@@ -61,6 +71,11 @@ ul {
     background-position: left;
     background-size: 25px 25px;
     cursor: pointer;
+}
+
+.user-form__clear_active {
+    transform: translateY(200%);
+    z-index: 999;
 }
 
 .sort {
