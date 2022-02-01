@@ -11,7 +11,8 @@ const searchForm = document.getElementById('search-form');
 const clearButton = document.getElementById('search-button');
 const deleteButton = document.getElementById('delete');
 const modalWindow = document.getElementById('modal');
-
+const sortButtonRating = document.getElementById('sort-rating');
+const sortButtonDate = document.getElementById('sort-date');
 
 
 
@@ -24,7 +25,6 @@ clearButton.addEventListener('click', e => {
 
 input.addEventListener('keydown', e => {
     const inputValue = e.target.value.trim();
-    console.log(inputValue)
     if (inputValue === 0) {
         searchForm.classList.remove('user-form_active');
         clearButton.classList.remove('user-form__clear_active');
@@ -52,7 +52,6 @@ const drawTable = users => {
     for (let i = 0; i < users.length; i++) {
         let date = new Date(users[i].registration_date);
         date = date.toLocaleDateString();
-        console.log(date);
         const userRow = `<tr>
                             <td>${users[i].username}</td>
                             <td>${users[i].email}</td>
@@ -83,29 +82,41 @@ const searchUser = e => {
 });*/
 input.addEventListener('keyup', searchUser);
 
-const showModal = () => {
-    let isActive = false;
 
-    if (!isActive) {
-        isActive = true;
-    } else {
-        isActive = false;
-    }
-    return isActive;
+let isAsc = false;
+
+const sortByRating = () => {
+    isAsc = !isAsc;
+    let sortedByRating = users.sort((a, b) => {
+        return (isAsc ? a.rating - b.rating : b.rating - a.rating);
+    })
+    drawTable(sortedByRating);
 }
 
-const sortByRating = asc => {
-    const rating = document.querySelectorAll('#rating');
-    let ratingValue = [];
-    for (let i = 0; i < rating.length; i++) {
-        ratingValue.push(+rating[i].innerText);
-    }
-
-    console.log(ratingValue)
+const sortByDate = () => {
+    isAsc = !isAsc;
+    let sortedByDate = users.sort((a, b) => {
+        return (isAsc ? new Date(a.registration_date) - new Date(b.registration_date): new Date(b.registration_date) - new Date(a.registration_date));
+    })
+    drawTable(sortedByDate);
 }
 
-console.log(deleteButton);
+const pagination = () => {
+    const paginationCount = document.getElementById('pagination');
+    let itemPerPage = 5;
+    let totalPages = Math.ceil(users.length / itemPerPage);
+    let items = [];
+    for (let i = 0; i < itemPerPage; i++) {
+        items.push(users[i]);
+    }
+    drawTable(items);
+    console.log(totalPages);
+}
+
+sortButtonDate.addEventListener('click', sortByDate);
+sortButtonRating.addEventListener('click', sortByRating);
+
 
 
 loadUser(URL)
-    .then(sortByRating);
+    .then(pagination);
